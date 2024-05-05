@@ -142,7 +142,17 @@ function searcha (arr, terms){
 }
 
 function searchd (arr, terms){
-  const filteredRestaurants = arr.filter(obj => obj.Dietary.every(
+	let dietSelected = false;
+		let checkboxd = document.getElementsByName("dcheckbox")
+	for (let e = 0; e < checkboxd.length; e++) {
+		if ( checkboxd[e].checked == true ){
+		break;
+	}};
+	if (dietSelected == false){
+		return arr;
+	
+	}
+	const filteredRestaurants = arr.filter(obj => obj.Dietary.every(
     diet => terms.includes(diet)
   ));
   return filteredRestaurants;
@@ -158,7 +168,6 @@ function searchb (arr, terms){
 
 function getCheckboxes(){
 	
-	resDisplay.innerHTML = " ";
 	
 	let allergens = [];
 	
@@ -198,19 +207,10 @@ function getCheckboxes(){
 	console.log(dietaryRestaraunts);
 
 
-/*
-	var searchbox = [];
-	
-	searchbox.push(document.getElementById("searchbox").value);
-	
-	if (searchbox[0] != null || searchbox[0] != ""){
-				let filteredRestaurants = searchb(dietaryRestaurants, searchbox);
-	}
 
-	else { */
 		
-		let filteredRestaurants = dietaryRestaurants;
-         
+	let filteredRestaurants = dietaryRestaurants;
+    
 	
 	
 	

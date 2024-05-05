@@ -1,0 +1,11 @@
+{
+  "name": "gathering-places-capstone",
+  "version": "1.0.0",
+  "description": "Gathering places in Lansing safe for dietary diversities in medical and religious needs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
