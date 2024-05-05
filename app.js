@@ -1,5 +1,5 @@
 
-/*
+
 const { MongoClient } = require("mongodb");
 
  
@@ -56,7 +56,7 @@ const client = new MongoClient(uri);
 run().catch(console.dir);
 
 
-*/
+
     const restaurants = [
 
            {
