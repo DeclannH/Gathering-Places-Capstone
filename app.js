@@ -53,7 +53,6 @@ const client = new MongoClient(uri);
 run().catch(console.dir);
 
 
-
 var resDisplay = document.getElementById("search container")
 
 function searcha (arr, terms){
@@ -170,7 +169,7 @@ function getCheckboxes(){
                             </div>\
                             <!-- Product actions-->\
                             <div class=\"card-footer p-4 pt-0 border-top-0 bg-transparent\">\
-                                <div class=\"text-center\"><a class=\"btn btn-outline-dark mt-auto\" href=\"#\">View Dishes</a></div>\
+                                <div class=\"text-center\"><a class=\"btn btn-outline-dark mt-auto\" id=\"button\" name=\""+res.name+"\" onclick=\"dish\(this.name\)\">View Dishes</a></div>\
                             </div>\
                         </div>\
                     </div>\
@@ -196,6 +195,17 @@ function getAllergens(){
 	}
 	
 	
+	
+	
+}
+
+function dish(name){
+	for(j in restaurants){
+		if(restaurants[j].name == name)
+			var card = restaurants[j];
+	}
+	
+	alert(card.Dishes);
 	
 	
 }
@@ -231,7 +241,7 @@ for(var r in restaurants){
                             </div>\
                             <!-- Product actions-->\
                             <div class=\"card-footer p-4 pt-0 border-top-0 bg-transparent\">\
-                                <div class=\"text-center\"><a class=\"btn btn-outline-dark mt-auto\" href=\"#\">View Dishes</a></div>\
+                              <div class=\"text-center\"><a class=\"btn btn-outline-dark mt-auto\" id=\"button\" name=\""+res.name+"\" onclick=\"dish\(this.name\)\">View Dishes</a></div>\
                             </div>\
                         </div>\
                     </div>\
