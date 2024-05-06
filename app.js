@@ -29,13 +29,10 @@ const client = new MongoClient(uri);
          const col = db.collection("GatheringPlaces");
 
 
-         const document = await col.find().toArray(function (err, docs) {
+         const restaurants = await col.find().toArray(function (err, docs) {
 
 });
 
-         // Print results
-
-         console.log("Document found:\n" + JSON.stringify(document));
 
         } catch (err) {
 
@@ -57,81 +54,6 @@ run().catch(console.dir);
 
 
 
-    const restaurants = [
-
-           {
-
-             name: "Fleetwood Diner",
-
-			 allergens: [ "Eggs", "Wheat", "Dairy" ],																													
-
-             Dishes: [ "Chili Cheese Fries", "Scrambled Eggs", "Omelets", "Biscuits and gravy", "Hamburgers", "Wagyu Steak"],
-			 
-			 Dietary: [],
-
-             image: "https://thefleetwooddiner.com/wp-content/uploads/2011/09/fleetwoodlogotopleft.jpg"
-
-           },
-
-			{
-
-             name: "Corey's Lounge",
-
-			 allergens: [ "Dairy", "Shellfish", "Soy", "fish" ],																													
-
-             Dishes: [ "Jalepeno Poppers", "Chicken Ceasar Salad", "Clam Chowder", "Center Cut Top Sirloin", "Baby Back Ribs", "Fried Lake Perch"],
-			 
-			 Dietary: ["Kosher"],
-
-             image: "https://img1.wsimg.com/isteam/ip/6687b234-bc14-4ce1-99a3-e53c1eae062b/blob-0001.png/:/rs=w:500,h:149,cg:true,m/cr=w:500,h:149/qt=q:100/ll"
-
-           },
-		   
-		    {
-
-             name: "Envie",
-
-			 allergens: [ "Soy", "Sesame", "Tree Nuts" ],																													
-
-             Dishes: [ "Gluten Free Olive Burger", "Tofu Stirfry", "Almond Milk Latte", "Seasonal Fruit Smoothie", "Mushrooms in Sesame Oil"],
-			 
-			 Dietary: ["Halal", "Kosher"],
-
-             image: "https://envie517.com/wp-content/uploads/2017/03/18922124_1905407053058537_2614110403499260959_n.jpg?w=960&h=400&crop=1"
-
-           },
-		   
-		   {
-
-             name: "Subway",
-
-			 allergens: [ "Soy", "Sesame", "Peanuts", "Wheat", "Eggs" ],																													
-
-             Dishes: [ "Footlong sub", "6 inch sub", "cookies", "flatbread", "power bowl", "soft drinks"],
-			 
-			 Dietary: ["Halal"],
-			 
-
-             image: "https://www.subway.com/en-us/-/media/Project/Remote-Order/Images/Logo/subway-logo.png?sc_lang=en-US"
-
-           },
-		   
-		   {
-
-             name: "Los Tres Amigos",
-
-			 allergens: [ "Dairy" ],																													
-
-             Dishes: [ "Burritos Amigos", "Fajita Bowl", "ChiChi's Fried Icecream", "cactus burrito", "Chili Rellenos", "Special Tapatio"],
-			 
-			 Dietary: ["Halal"],
-
-             image: "https://lostresamigosonline.com/images/los-tres-amigos-mexican-restaurant-food-catering_01.jpg"
-
-           },
-
-         ]
-
 var resDisplay = document.getElementById("search container")
 
 function searcha (arr, terms){
@@ -142,21 +64,12 @@ function searcha (arr, terms){
 }
 
 function searchd (arr, terms){
-	let dietSelected = false;
-		let checkboxd = document.getElementsByName("dcheckbox")
-	for (let e = 0; e < checkboxd.length; e++) {
-		if ( checkboxd[e].checked == true ){
-		break;
-	}};
-	if (dietSelected == false){
-		return arr;
-	
-	}
 	const filteredRestaurants = arr.filter(obj => obj.Dietary.every(
     diet => terms.includes(diet)
   ));
   return filteredRestaurants;
 }
+
 function searchb (arr, terms){
   const filteredRestaurants = arr.filter(obj => obj.Dishes.every(
     dish => terms.includes(dish)
@@ -168,21 +81,25 @@ function searchb (arr, terms){
 
 function getCheckboxes(){
 	
+	resDisplay.innerHTML = " ";
 	
 	let allergens = [];
 	
-	
+	//get check boxes for allergens and search them
 	let checkboxa = document.getElementsByName("acheckbox");
 	for (let i = 0; i < checkboxa.length; i++) {
 		if ( checkboxa[i].checked == true )
 	allergens.push(checkboxa[i].id); }
 	
+	//run allergen search
 	let allergenRestaurants = searcha(restaurants, allergens);
 	console.log(allergenRestaurants);
 	
+	//set variables for religious diet restrictions
 	let dietary = [];
 	let dietSelected = false;
 	
+	//check boxes for religious diet restrictions
 	let checkboxd = document.getElementsByName("dcheckbox")
 	for (let e = 0; e < checkboxd.length; e++) {
 		if ( checkboxd[e].checked == true ){
@@ -191,34 +108,50 @@ function getCheckboxes(){
 		}
 	}
 	
-	console.log(dietary);
-	
-	
 	if (dietSelected == true){
 		var dietaryRestaurants = searchd(allergenRestaurants, dietary);
 	
 	}
 	else {
-		var dietaryRestaraunts = allergenRestaurants;
+		var dietaryRestaurants = allergenRestaurants;
 	}
 	
-	
-	console.log(dietSelected)
-	console.log(dietaryRestaraunts);
 
 
+	//this section bypasses an issue where nothing selected for dietary requirements returns nothing in the search Area
+	if (dietSelected == false){
+		dietaryRestaurants = allergenRestaurants;
+	}
 
-		
-	let filteredRestaurants = dietaryRestaurants;
-    
+	//retrieve value from searchbox, turn it into an array to function with the searches, and search
+	
+	var searchbox = [];
+	
+
+	let sboxcheck = false;
+	let svalue = document.getElementById("searchbox").value.trim();
+	console.log(svalue.length);
+	
+	//check for search value and search
+	if (svalue.length != 0 ){
+		console.log("empty")
+        searchbox.push(svalue);
+		let filteredRestaurants = searchb(dietaryRestaurants, searchbox);
+		console.log(searchbox[0])
 	
 	
+	} else {
+		var filteredRestaurants = dietaryRestaurants;
 	
+
+    }
+
 	
-	
-	
-	
+	//reset innerhtml of display, then display results
 	resDisplay.innerHTML = "";
+	
+	if (svalue.length === 0)
+		filteredRestaurants = dietaryRestaurants;
 		
 	for(var k in filteredRestaurants){
 	var res = restaurants[k];
@@ -278,20 +211,11 @@ function getDietary(){
 
 
 
-const allergencheck = ["Shellfish", "Dairy"];
-
-const res2 = searcha(restaurants, allergencheck);
-console.log(res);
-
-
-
-console.log(resDisplay);
 
 var endresult = "";
 
 for(var r in restaurants){
 	var res = restaurants[r];
-	console.log(res);
 
      var result = "              <div class=\"col mb-5\">\
                         <div class=\"card h-100\">\
